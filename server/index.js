@@ -5,7 +5,6 @@ import profileRoutes from "./routes/Profile.js";
 import courseRoutes from "./routes/Course.js";
 import paymentRoutes from "./routes/Payments.js";
 import contactUsRoute from "./routes/Contact.js";
-
 import categoryRoutes from "./routes/categoryRoutes.js";
 
 import { connect } from "./config/database.js";
@@ -19,39 +18,53 @@ dotenv.config();
 
 const PORT = process.env.PORT || 4000;
 
-//database connect
+// Connect to database
 connect();
-//middleware
+
+// Allowed origins
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://study-notion-nine-flame.vercel.app",
+];
+
+// Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: process.env.VITE_API_URL || "http://localhost:3000",
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like mobile apps, curl, postman)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 
 app.use(fileUpload({ useTempFiles: true, tempFileDir: "/tmp/" }));
 
-//cloudinary connect
+// Cloudinary connect
 cloudinaryConnect();
-//routes
+
+// Routes
 app.use("/api/v1/auth", userRoutes);
 app.use("/api/v1/profile", profileRoutes);
 app.use("/api/v1/course", courseRoutes);
-// app.use("/api/v1/category", courseRoutes);
 app.use("/api/v1/payment", paymentRoutes);
 app.use("/api/v1/reach", contactUsRoute);
 app.use("/api/v1/category", categoryRoutes);
 
-//default route
+// Default route
 app.get("/", (req, res) => {
   return res.json({
     success: true,
-    message: "your server is up and running",
+    message: "Your server is up and running",
   });
 });
 
 app.listen(PORT, () => {
-  console.log(`server is running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
