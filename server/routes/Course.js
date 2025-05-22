@@ -34,7 +34,7 @@ import {
   createSubSection,
   updateSubSection,
   deleteSubSection,
-} from "../controllers/Subsection.js";
+} from "../controllers/SubSection.js";
 
 // Rating Controllers Import
 import {
