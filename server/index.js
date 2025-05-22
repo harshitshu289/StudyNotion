@@ -24,7 +24,7 @@ connect();
 // Allowed origins
 const allowedOrigins = [
   "http://localhost:3000",
-  "https://study-notion-nine-flame.vercel.app",
+  "https://study-notion-henna.vercel.app/",
 ];
 
 // Middleware
